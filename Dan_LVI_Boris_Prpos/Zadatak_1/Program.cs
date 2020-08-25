@@ -19,6 +19,7 @@ namespace Zadatak_1
             string originPath = @"..\..\HTML\HTML";
             //path where will be folder that will contain files
             string directory = @"..\..\HTML";
+            
             while (true)
             {
                 try
@@ -47,10 +48,10 @@ namespace Zadatak_1
                             //count how many files there is, in order to give them different names
                             int fileCount = Directory.GetFiles(directory, "*.*", SearchOption.TopDirectoryOnly).Length;
                             //create unique name for every file using fileCount number
-                            string path = originPath + fileCount.ToString() + ".txt";
+                            string path = originPath + fileCount.ToString() + ".html";
                             //download html code
                             string htmlCode = client.DownloadString(input);
-                            //stream writer writes to file
+                            //stream writer w
                             StreamWriter sw = new StreamWriter(path, true);
                             sw.WriteLine(htmlCode);
                             sw.Close();
