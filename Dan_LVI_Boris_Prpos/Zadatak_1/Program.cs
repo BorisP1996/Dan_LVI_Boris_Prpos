@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.IO.Compression;
 
 
+
 namespace Zadatak_1
 {
-    class Program
+    class Program 
     {
         static void Main(string[] args)
         {
@@ -18,40 +15,42 @@ namespace Zadatak_1
             string directory = @"..\..\HTML";
             while (true)
             {
-                Console.WriteLine("\nEnter web page link to download html code:\nEnter \"zip\" to zip all downloaded files:\nEnter \"x\" to exit the program:\n");
-
-                string input = Console.ReadLine();
-
-                if (input == "x" || input == "X")
+                try
                 {
-                    break;
-                }
-
-                else if (input == "zip")
-                {
-               
-                    ZipFile.CreateFromDirectory(directory, @"..\..\Zipp_Folder");
-                    ZipFile.ExtractToDirectory(@"..\..\Zipp_Folder", directory);
-
-                    Console.WriteLine("\nFiles are zipped\n");
-                   
-                }
-
-                else
-                {
-                    using (WebClient client = new WebClient())
+                    Console.WriteLine("\nEnter web page link to download html code:\nEnter \"zip\" to zip all downloaded files:\nEnter \"x\" to exit the program:\n");
+                    string input = Console.ReadLine();
+                    if (input == "x" || input == "X")
                     {
-                        int fileCount = Directory.GetFiles(directory, "*.*", SearchOption.TopDirectoryOnly).Length;
-                        string path = originPath + fileCount.ToString() + ".txt";
-                        string htmlCode = client.DownloadString(input);
-                        StreamWriter sw = new StreamWriter(path, true);
-                        sw.WriteLine(htmlCode);
-                        sw.Close();
-                        Console.WriteLine("\nHTML code is downloaded.\n");
-
+                        break;
+                    }
+                    else if (input == "zip")
+                    {
+                        File.Delete(@"..\..\ZIPPED.zip");
+                        ZipFile.CreateFromDirectory(@"..\..\HTML\", @"..\..\ZIPPED.zip");
+                        Console.WriteLine("\nFiles are zipped\n");
+                    }
+                    else
+                    {
+                        using (WebClient client = new WebClient())
+                        {
+                            int fileCount = Directory.GetFiles(directory, "*.*", SearchOption.TopDirectoryOnly).Length;
+                            string path = originPath + fileCount.ToString() + ".txt";
+                            string htmlCode = client.DownloadString(input);
+                            StreamWriter sw = new StreamWriter(path, true);
+                            sw.WriteLine(htmlCode);
+                            sw.Close();
+                            Console.WriteLine("\nHTML code is downloaded.\n");
+                        }
                     }
                 }
-
+                catch (UriFormatException)
+                {
+                    Console.WriteLine("Invalid link. Please try again.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Invalid input. Please try again.");
+                }
             }
         }
     }
